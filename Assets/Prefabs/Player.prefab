@@ -151,7 +151,7 @@ MonoBehaviour:
   _extraJumpPower: 50
   _jumpPreGroundedToleranceTime: 0.15
   _jumpPostGroundedToleranceTime: 0.15
-  _maxMidAirJumps: 1
+  _maxMidAirJumps: 0
   _useRootMotion: 0
   _rootMotionRotation: 0
 --- !u!1 &6102729988539513668
