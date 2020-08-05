@@ -16,6 +16,9 @@ EditorBuildSettings:
     guid: b19a723d03fd99a4c88460bfa7f383ac
   - enabled: 1
     path: Assets/Scenes/Level04.unity
+    guid: c44b63b4b53ca3e499bf92c612e7af7f
+  - enabled: 1
+    path: Assets/Scenes/Level05.unity
     guid: dc0f76d6dacb51948a6b0c16610bec9d
   - enabled: 1
     path: Assets/Scenes/Prototype.unity
