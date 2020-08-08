@@ -1,0 +1,23 @@
+fileFormatVersion: 2
+guid: 2b348a08bfcfda848af2df993cfb1276
+TrueTypeFontImporter:
+  externalObjects: {}
+  serializedVersion: 4
+  fontSize: 16
+  forceTextureCase: -2
+  characterSpacing: 0
+  characterPadding: 1
+  includeFontData: 1
+  fontNames:
+  - Barlow
+  fallbackFontReferences:
+  - {fileID: 12800000, guid: 1507f5231da4e594c8eaf7a0c4dd9497, type: 3}
+  - {fileID: 12800000, guid: 78e9fd565555f9442afc963c21f8b83e, type: 3}
+  customCharacters: 
+  fontRenderingMode: 0
+  ascentCalculationMode: 1
+  useLegacyBoundsCalculation: 0
+  shouldRoundAdvanceValue: 1
+  userData: 
+  assetBundleName: 
+  assetBundleVariant: 

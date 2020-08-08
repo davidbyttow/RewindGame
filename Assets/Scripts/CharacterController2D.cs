@@ -7,6 +7,7 @@ public class CharacterController2D : BaseCharacterController {
 
 	private bool faceMoveDirection = false;
 	private bool orientUpInAir = true;
+	private bool jumped = false;
 
 	protected override void Animate() {
 	}
@@ -29,6 +30,27 @@ public class CharacterController2D : BaseCharacterController {
 			y = 0.0f,
 			z = Input.GetAxisRaw("Vertical")
 		};
+	}
+
+	protected override void Jump() {
+		bool jumping = isJumping;
+		base.Jump();
+		if (!jumping && isJumping) {
+			SoundManager.inst.PlayJump();
+		}
+	}
+
+	public override void FixedUpdate() {
+
+		bool wasFalling = isFalling || isJumping;
+
+		base.FixedUpdate();
+
+		if (wasFalling && movement.isGrounded) {
+			// landed
+			Debug.Log("landed");
+			SoundManager.inst.PlayJump();
+		}
 	}
 
 	protected override void UpdateRotation() {

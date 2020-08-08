@@ -2,6 +2,7 @@
 using UnityEngine.UI;
 using System.Collections;
 using TMPro;
+using UnityEngine.SceneManagement;
 using System.Collections.Generic;
 
 public class TimeManager : MonoBehaviour {
@@ -10,8 +11,9 @@ public class TimeManager : MonoBehaviour {
 
 	public ScreenFx screenFx;
 	public TextMeshProUGUI statusText;
+	public Image recordCircle;
 	public float maxRecordingDuration = 3;
-	public bool autoRewind = true;
+	public bool playable = true;
 
 	enum State {
 		None,
@@ -37,13 +39,21 @@ public class TimeManager : MonoBehaviour {
 		}
 		inst = this;
 		statusText.text = "";
+		recordCircle.enabled = false;
 	}
 
 	void Start() {
 		recordables.AddRange(FindObjectsOfType<Recordable>());
 	}
 
+	public void GotoNextLevel() {
+		SceneManager.LoadScene(SceneManager.GetActiveScene().buildIndex + 1);
+	}
+
 	void Update() {
+		if (!playable) {
+			return;
+		}
 		if (Input.GetKeyDown(KeyCode.R)) {
 			if (canRecord) {
 				Record();
@@ -58,12 +68,15 @@ public class TimeManager : MonoBehaviour {
 			durationRecorded += Time.deltaTime;
 			statusText.text = "Recording";
 			statusText.color = Color.red;
+			var color = Color.red;
+			color.a = (Mathf.Cos(durationRecorded * 2.0f * Mathf.PI) + 1.0f) * 0.5f;
+			recordCircle.color = color;
 
 			if (durationRecorded >= maxRecordingDuration) {
 				StopRecording();
 			}
 		} else if (rewinding) {
-			statusText.text = "Rewinding";
+			statusText.text = "";
 			statusText.color = Color.yellow;
 
 			rewindTimestamp += Time.deltaTime;
@@ -77,7 +90,7 @@ public class TimeManager : MonoBehaviour {
 			statusText.text = "Recorded";
 			statusText.color = Color.green;
 		} else {
-			statusText.text = "Ready";
+			statusText.text = "Not recording";
 			statusText.color = Color.white;
 		}
 	}
@@ -98,14 +111,16 @@ public class TimeManager : MonoBehaviour {
 		if (screenFx) {
 			screenFx.SetState(ScreenFx.State.Recording);
 		}
+		SoundManager.inst.PlayBeep();
+		recordCircle.enabled = true;
 	}
 
 	void StopRecording() {
 		state = State.Recorded;
 		recordables.ForEach((r) => { r.StopRecording(durationRecorded); });
-		if (autoRewind) {
-			Rewind();
-		}
+		SoundManager.inst.PlayRecordStop();
+		Rewind();
+		recordCircle.enabled = false;
 	}
 
 	public void Rewind() {
@@ -118,9 +133,12 @@ public class TimeManager : MonoBehaviour {
 		if (screenFx) {
 			screenFx.SetState(ScreenFx.State.Rewinding);
 		}
+		SoundManager.inst.PlayStatic();
 	}
 
 	void EraseTape() {
+		SoundManager.inst.StopStatic();
+		SoundManager.inst.PlayRewindStop();
 		state = State.None;
 		durationRecorded = 0;
 		rewindTimestamp = 0;
